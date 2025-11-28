@@ -117,6 +117,10 @@ class VL53L8CH {
     uint8_t cnh_send_config(VL53LMZ_Motion_Configuration *p_mi_config);
     uint8_t cnh_get_block_addresses(VL53LMZ_Motion_Configuration *p_mi_config, int32_t agg_id, cnh_data_buffer_t mi_persistent_array, int32_t **p_hist, int8_t  **p_hist_scaler, int32_t **p_ambient, int8_t **p_ambient_scaler);
     uint32_t cnh_get_ref_residual(cnh_data_buffer_t mi_persistent_array);
+    uint8_t get_ranging_frequency_x256(VL53LMZ_Configuration *p_dev, uint16_t *p_frequency_x256);
+    uint8_t set_ranging_frequency_x256(VL53LMZ_Configuration *p_dev, uint16_t p_frequency_x256);
+    uint8_t get_VHV_repeat_count(VL53LMZ_Configuration *p_dev, uint32_t *p_repeat_count);
+    uint8_t set_VHV_repeat_count(VL53LMZ_Configuration *p_dev, uint32_t p_repeat_count);
 
     /**
      * @brief Utility function to read data.

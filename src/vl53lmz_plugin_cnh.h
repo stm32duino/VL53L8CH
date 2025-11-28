@@ -58,7 +58,7 @@ extern "C" {
  */
 typedef uint32_t cnh_data_buffer_t[VL53LMZ_CNH_MAX_DATA_WORDS];
 
-#define VL53LMZ_CNH_DATA_IDX      ((uint32_t)0xC048U)
+#define VL53LMZ_CNH_DATA_IDX      ((uint16_t)0xC048U)
 #define VL53LMZ_CNH_DATA_BH       ((uint32_t)((VL53LMZ_CNH_DATA_IDX<<16)+((sizeof(cnh_data_buffer_t)<<4)))
 
 

@@ -17,6 +17,7 @@
   #pragma anon_unions
 #endif
 
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -27,7 +28,7 @@ extern "C" {
  * @brief Current driver version.
  */
 
-#define VL53LMZ_API_REVISION      "VL53LMZ_2.0.10"
+#define VL53LMZ_API_REVISION      "VL53LMZ_2.0.16"
 
 
 /**
@@ -86,7 +87,7 @@ extern "C" {
  * - VL53LMZ_POWER_MODE_DEEP_SLEEP: This mode clears all memory, by consequence the firmware,
  * the configuration and the calibration are lost. It is recommended when the device sleeps during
  * a long time as it consumes a very low current consumption.
- * Both modes can be changed using function vl53l8ch_set_power_mode().
+ * Both modes can be changed using function vl53l8cx_set_power_mode().
  */
 
 #define VL53LMZ_POWER_MODE_SLEEP    ((uint8_t) 0U)
@@ -104,6 +105,7 @@ extern "C" {
 #define VL53LMZ_STATUS_CORRUPTED_FRAME    ((uint8_t) 2U)
 #define VL53LMZ_STATUS_LASER_SAFETY     ((uint8_t) 3U)
 #define VL53LMZ_STATUS_UNKNOWN_DEVICE   ((uint8_t) 4U)
+#define VL53LMZ_STATUS_FW_CHECKSUM_FAIL   ((uint8_t) 5U)
 #define VL53LMZ_MCU_ERROR         ((uint8_t) 66U)
 #define VL53LMZ_STATUS_INVALID_PARAM    ((uint8_t) 127U)
 #define VL53LMZ_STATUS_FUNC_NOT_AVAILABLE   ((uint8_t) 254U)
@@ -181,6 +183,7 @@ extern "C" {
 #define VL53LMZ_DCI_FW_NB_TARGET    ((uint16_t)0x5478U)
 #define VL53LMZ_DCI_RANGING_MODE    ((uint16_t)0xAD30U)
 #define VL53LMZ_DCI_DSS_CONFIG      ((uint16_t)0xAD38U)
+#define VL53LMZ_DCI_VHV_CONFIG      ((uint16_t)0xAD60U)
 #define VL53LMZ_DCI_TARGET_ORDER    ((uint16_t)0xAE64U)
 #define VL53LMZ_DCI_SHARPENER     ((uint16_t)0xAED8U)
 #define VL53LMZ_DCI_INTERNAL_CP     ((uint16_t)0xB39CU)
@@ -558,6 +561,36 @@ uint8_t vl53lmz_set_ranging_frequency_hz(
   uint8_t       frequency_hz);
 
 /**
+ * @brief This function gets the current ranging frequency in Hz scaled up by
+ * a factor of 256 to enable non-integer values to be returned.
+ * Ranging frequency corresponds to the time between each measurement.
+ * @param (VL53LMZ_Configuration) *p_dev : VL53LMZ configuration structure.
+ * @param (uint8_t) *p_frequency_x256: Contains the ranging frequency scaled
+ * to 256 x Hz.
+ * @return (uint8_t) status : 0 if ranging frequency is OK.
+ */
+uint8_t vl53lmz_get_ranging_frequency_x256(
+  VL53LMZ_Configuration       *p_dev,
+  uint16_t                    *p_frequency_x256);
+
+/**
+ * @brief This function sets a new ranging frequency in Hz scaled up by 256
+ * to enable non-integer values to be set.
+ * Ranging frequencycorresponds to the measurements frequency. This setting
+ * depends on the resolution, so please select your resolution before using
+ * this function.
+ * @param (VL53LMZ_Configuration) *p_dev : VL53LMZ configuration structure.
+ * @param (uint8_t) frequency_x256 : Contains the ranging frequency in Hz.
+ * - For 4x4, min and max allowed values are : [1*256;60*256]
+ * - For 8x8, min and max allowed values are : [1*256;15*256]
+ * @return (uint8_t) status : 0 if ranging frequency is OK, or 127 if the value
+ * is not correct.
+ */
+uint8_t vl53lmz_set_ranging_frequency_x256(
+  VL53LMZ_Configuration       *p_dev,
+  uint16_t                    frequency_x256);
+
+/**
  * @brief This function gets the current integration time in ms.
  * @param (VL53LMZ_Configuration) *p_dev : VL53LMZ configuration structure.
  * @param (uint32_t) *p_time_ms: Contains integration time in ms.
@@ -724,6 +757,29 @@ uint8_t vl53lmz_set_glare_filter_cfg(
   uint8_t         threshold_pc_x10,
   int16_t         max_range);
 
+/**
+ * @brief This function is used to get the number of frames between 2 temperature
+ * compensation.
+ * @param (VL53LMZ_Configuration) *p_dev : VL53LMZ configuration structure.
+ * @param (uint32_t) *p_repeat_count : Number of frames before next temperature
+ * compensation. Set to 0 to disable the feature (default configuration).
+ */
+uint8_t vl53lmz_get_VHV_repeat_count(
+  VL53LMZ_Configuration *p_dev,
+  uint32_t *p_repeat_count);
+
+/**
+ * @brief This function is used to set a periodic temperature compensation. By
+ * setting a repeat count different to 0 the firmware automatically runs a
+ * temperature calibration every N frames.
+ * default the repeat count is set to 0
+ * @param (VL53LMZ_Configuration) *p_dev : VL53LMZ configuration structure.
+ * @param (uint32_t) repeat_count : Number of frames between temperature
+ * compensation. Set to 0 to disable the feature (default configuration).
+ */
+uint8_t vl53lmz_set_VHV_repeat_count(
+  VL53LMZ_Configuration *p_dev,
+  uint32_t repeat_count);
 
 /**
  * @brief This function can be used to read 'extra data' from DCI. Using a known

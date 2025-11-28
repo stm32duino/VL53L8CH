@@ -73,6 +73,10 @@ cnh_calc_min_max_distance    KEYWORD2
 cnh_send_config    KEYWORD2
 cnh_get_block_addresses    KEYWORD2
 cnh_get_ref_residual    KEYWORD2
+get_ranging_frequency_x256   KEYWORD2
+set_ranging_frequency_x256   KEYWORD2
+get_VHV_repeat_count   KEYWORD2
+set_VHV_repeat_count   KEYWORD2
 
 #######################################
 # Constants (LITERAL1)
@@ -184,3 +188,5 @@ VL53LMZ_CNH_MAX_DATA_WORDS LITERAL1
 VL53LMZ_CNH_MAX_DATA_BYTES LITERAL1
 VL53LMZ_CNH_DATA_IDX LITERAL1
 VL53LMZ_CNH_DATA_BH LITERAL1
+VL53LMZ_DCI_VHV_CONFIG LITERAL1
+VL53LMZ_STATUS_FW_CHECKSUM_FAIL LITERAL1

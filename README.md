@@ -51,6 +51,7 @@ There are 3 examples with the VL53L8CH library:
 
 * VL53L8CH_ThresholdsDetection: This example code is to show how to configure the thresholds detection of the VL53L8CH satellite sensor.
 
+* VL53L8CH_CNHData: This example code is to show how to configure, capture and decode CNH data from the VL53L8CH sensors.
 
 ## Documentation
 

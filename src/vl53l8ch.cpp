@@ -770,6 +770,63 @@ uint32_t VL53L8CH::cnh_get_ref_residual(cnh_data_buffer_t mi_persistent_array)
   return vl53lmz_cnh_get_ref_residual(mi_persistent_array);
 }
 
+/**
+ * @brief This function gets the current ranging frequency in Hz scaled up by
+ * a factor of 256 to enable non-integer values to be returned.
+ * Ranging frequency corresponds to the time between each measurement.
+ * @param (VL53LMZ_Configuration) *p_dev : VL53LMZ configuration structure.
+ * @param (uint8_t) *p_frequency_x256: Contains the ranging frequency scaled
+ * to 256 x Hz.
+ * @return (uint8_t) status : 0 if ranging frequency is OK.
+ */
+uint8_t VL53L8CH::get_ranging_frequency_x256(VL53LMZ_Configuration *p_dev, uint16_t *p_frequency_x256)
+{
+  return vl53lmz_get_ranging_frequency_x256(p_dev, p_frequency_x256);
+}
+
+/**
+ * @brief This function sets a new ranging frequency in Hz scaled up by 256
+ * to enable non-integer values to be set.
+ * Ranging frequencycorresponds to the measurements frequency. This setting
+ * depends on the resolution, so please select your resolution before using
+ * this function.
+ * @param (VL53LMZ_Configuration) *p_dev : VL53LMZ configuration structure.
+ * @param (uint8_t) frequency_x256 : Contains the ranging frequency in Hz.
+ * - For 4x4, min and max allowed values are : [1*256;60*256]
+ * - For 8x8, min and max allowed values are : [1*256;15*256]
+ * @return (uint8_t) status : 0 if ranging frequency is OK, or 127 if the value
+ * is not correct.
+ */
+uint8_t VL53L8CH::set_ranging_frequency_x256(VL53LMZ_Configuration *p_dev, uint16_t frequency_x256)
+{
+  return vl53lmz_set_ranging_frequency_x256(p_dev, frequency_x256);
+}
+
+/**
+ * @brief This function is used to get the number of frames between 2 temperature
+ * compensation.
+ * @param (VL53LMZ_Configuration) *p_dev : VL53LMZ configuration structure.
+ * @param (uint32_t) *p_repeat_count : Number of frames before next temperature
+ * compensation. Set to 0 to disable the feature (default configuration).
+ */
+uint8_t VL53L8CH::get_VHV_repeat_count(VL53LMZ_Configuration *p_dev, uint32_t *p_repeat_count)
+{
+  return vl53lmz_get_VHV_repeat_count(p_dev, p_repeat_count);
+}
+
+/**
+ * @brief This function is used to set a periodic temperature compensation. By
+ * setting a repeat count different to 0 the firmware automatically runs a
+ * temperature calibration every N frames.
+ * default the repeat count is set to 0
+ * @param (VL53LMZ_Configuration) *p_dev : VL53LMZ configuration structure.
+ * @param (uint32_t) repeat_count : Number of frames between temperature
+ * compensation. Set to 0 to disable the feature (default configuration).
+ */
+uint8_t VL53L8CH::set_VHV_repeat_count(VL53LMZ_Configuration *p_dev, uint32_t repeat_count)
+{
+  return vl53lmz_set_VHV_repeat_count(p_dev, repeat_count);
+}
 
 uint8_t VL53L8CH_io_write(void *handle, uint16_t RegisterAddress, uint8_t *p_values, uint32_t size)
 {
